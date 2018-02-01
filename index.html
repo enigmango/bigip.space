@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+body {
+  font-family:    Arial, Helvetica, sans-serif;
+  color:          white;
+}
+.big {
+    font-size:      12vw;
+}
+footer {
+  font-family:    Arial, Helvetica, sans-serif;
+  color:          white;
+  font-size:      0.75em;
+  margin-top:     4em;
+}
+.w3-animate-fading{animation:fading 10s infinite}@keyframes fading{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
+.w3-animate-opacity{animation:opac 0.8s}@keyframes opac{from{opacity:0} to{opacity:1}}
+}
+</style>
+<head>
+  <title>
+    The Big IP Space
+  </title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body background=bg.png> <!-- https://www.toptal.com/designers/subtlepatterns/stardust/ -->
+
+<div class="big" id="ip-text" onclick=copyIP(myIP)></div>
+<div id=details></div>
+
+<script type="application/javascript">
+  myIP = "Error"
+  function setText(json) {
+    var ipText = document.getElementById("ip-text");
+    myIP = json.ip;
+    detailsText = "This is your public IP address. Click it to copy it to the clipboard.";
+    ipText.innerHTML += myIP;
+    details.innerHTML = detailsText;
+  }
+
+  function ipifyScriptBlocked() {
+    setText({"ip": "Sorry!"})
+    var errorText = `
+An ad/script blocker has blocked the ability to view your public IP.<br />
+That's cool, but if you want to use this site as it was intended, you'll need
+to let <b>bigip.space</b> call scripts from <b>api.ipify.org</b>.
+<br /><br />
+<em>Using uBlock Origin? <a href=ublock-example.html>See an example.</a></em>
+`
+    details.innerHTML = errorText
+  }
+
+  function copyIP(input) {
+      document.getElementById("ip-text").classList.toggle('w3-animate-opacity')
+      document.getElementById("ip-text").classList.toggle('w3-animate-fading')
+      if (window.clipboardData && window.clipboardData.setData) {
+          // IE specific code path to prevent textarea being shown while dialog is visible.
+          return clipboardData.setData("Text", text);
+
+      } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+          var textarea = document.createElement("textarea");
+          textarea.textContent = input;
+          textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+          document.body.appendChild(textarea);
+          textarea.select();
+          try {
+              document.getElementById("ip-text").classList.add('w3-animate-opacity')
+              document.getElementById("ip-text").classList.add('w3-animate-fading')
+              return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+          } catch (ex) {
+              console.warn("Copy to clipboard failed.", ex);
+              return false;
+          } finally {
+              document.body.removeChild(textarea);
+          }
+      }
+  }
+</script>
+</body>
+<footer>
+  <a href=https://gitlab.org>An open-source project</a>
+</footer>
+<script type="application/javascript"
+  src="https://api.ipify.org?format=jsonp&callback=setText"
+  onerror=ipifyScriptBlocked()>
+</script>
+</html>
