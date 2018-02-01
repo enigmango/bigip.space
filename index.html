@@ -7,9 +7,12 @@
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body background=bg.png> <!-- https://www.toptal.com/designers/subtlepatterns/stardust/ -->
-
-<div class="big" id="ip-text" onclick=copyIP(myIP)></div>
-<div id=details></div>
+  <div class="big" id="ip-text" onclick=copyIP(myIP)></div>
+  <div id=details></div>
+  <footer>
+    <a href=https://gitlab.org>An open-source project</a>
+  </footer>
+</body>
 
 <script type="application/javascript">
   myIP = "Error"
@@ -34,8 +37,8 @@ to let <b>bigip.space</b> call scripts from <b>api.ipify.org</b>.
   }
 
   function copyIP(input) {
-      document.getElementById("ip-text").classList.toggle('w3-animate-opacity')
-      document.getElementById("ip-text").classList.toggle('w3-animate-fading')
+      document.getElementById("ip-text").classList.toggle('animate-opacity')
+      document.getElementById("ip-text").classList.toggle('animate-fading')
       if (window.clipboardData && window.clipboardData.setData) {
           // IE specific code path to prevent textarea being shown while dialog is visible.
           return clipboardData.setData("Text", text);
@@ -47,8 +50,8 @@ to let <b>bigip.space</b> call scripts from <b>api.ipify.org</b>.
           document.body.appendChild(textarea);
           textarea.select();
           try {
-              document.getElementById("ip-text").classList.add('w3-animate-opacity')
-              document.getElementById("ip-text").classList.add('w3-animate-fading')
+              document.getElementById("ip-text").classList.add('animate-opacity')
+              document.getElementById("ip-text").classList.add('animate-fading')
               return document.execCommand("copy");  // Security exception may be thrown by some browsers.
           } catch (ex) {
               console.warn("Copy to clipboard failed.", ex);
@@ -59,10 +62,6 @@ to let <b>bigip.space</b> call scripts from <b>api.ipify.org</b>.
       }
   }
 </script>
-</body>
-<footer>
-  <a href=https://gitlab.org>An open-source project</a>
-</footer>
 <script type="application/javascript"
   src="https://api.ipify.org?format=jsonp&callback=setText"
   onerror=ipifyScriptBlocked()>
