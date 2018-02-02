@@ -6,21 +6,21 @@
   </title>
   <link rel="stylesheet" href="css/main.css">
 </head>
-<body background=bg.png> <!-- https://www.toptal.com/designers/subtlepatterns/stardust/ -->
-<h1>How to let ipspace.club get your public IP</h1>
+<body background=img/bg.png> <!-- https://www.toptal.com/designers/subtlepatterns/stardust/ -->
+<h1>How to let bigip.space get your public IP</h1>
 <p>
-  1.  Open your uBlock settings panel and go to the <b>My filters</b> tab.<br />
+  1. Open your uBlock settings panel and go to the <b>My filters</b> tab.<br />
   2. Enter the following filter (or similar, as you see fit):
 <p>
 <em>
-  ! Let ipspace.club see my public IP. Added YYYY-MM-DD<br />
-  @@||api.ipify.org^$script,domain=ipspace.club
+  ! Let bigip.space see my public IP. Added on 2018-01-31<br />
+  @@||api.ipify.org^$script,domain=bigip.space
 </em>
 <p>
 This lets <b>only this domain</b> access the ipify.org script needed to grab your
 public IP address. The line with the ! is a comment.
 <p>
   Here's what it looks like:<br />
-  <img src="ublock-example.png">
+  <img src="img/ublock.png">
 </body>
 </html>
