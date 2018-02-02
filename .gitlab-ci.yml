@@ -4,6 +4,7 @@ production:
   script:
     - pip install awscli
     - aws s3 sync $CI_PROJECT_DIR/bigip.space/ s3://$S3_BUCKET_NAME/ --delete
+  tags:
     - shared
   only:
     - master
