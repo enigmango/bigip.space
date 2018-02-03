@@ -51,7 +51,7 @@ to let <b>bigip.space</b> call scripts from <b>api.ipify.org</b>.\
       document.getElementById("ip-text").classList.toggle('animate-fading')
       if (window.clipboardData && window.clipboardData.setData) {
           // IE specific code path to prevent textarea being shown while dialog is visible.
-          return clipboardData.setData("Text", text);
+          return clipboardData.setData("Text", input);
 
       } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
           var textarea = document.createElement("textarea");
