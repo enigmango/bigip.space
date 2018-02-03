@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <title>
-    The Big IP Space
-  </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name=copyright content="Whatever, go for it">
+  <meta name="description" content="Get your public IP address and easily copy it to the clipboard. Big. Space-ish.">
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body background=img/bg.png> <!-- https://www.toptal.com/designers/subtlepatterns/stardust/ -->
   <div class="big" id="ip-text" onclick=copyIP(myIP)></div>
   <div id=details></div>
   <noscript>
+    <title>
+      Your public IP address | BIGIP.SPACE
+    </title>
     <p>
       Sorry! This site uses JavaScript to detect your public IP address.
       You'll have to enable JavaScript to experience everything this site has to offer.
@@ -23,12 +26,12 @@
   </footer>
 </body>
 <script type="application/javascript">
-  myIP = "Error"
   function setText(json) {
     var ipText = document.getElementById("ip-text");
     myIP = json.ip;
     detailsText = "This is your public IP address. Click it to copy it to the clipboard.";
-    ipText.innerHTML += myIP;
+    ipText.innerHTML = myIP;
+    document.title = myIP + " | BIGIP.SPACE";
     details.innerHTML = detailsText;
   }
 
