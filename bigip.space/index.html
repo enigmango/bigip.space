@@ -37,13 +37,12 @@
 
   function ipifyScriptBlocked() {
     setText({"ip": "Sorry!"})
-    var errorText = `
-An ad/script blocker has blocked the ability to view your public IP.<br />
-That's cool, but if you want to use this site as it was intended, you'll need
-to let <b>bigip.space</b> call scripts from <b>api.ipify.org</b>.
-<br /><br />
-<em>Using uBlock Origin? <a href=ublock-example.html>See an example.</a></em>
-`
+    var errorText = "An ad/script blocker has blocked the ability to view your public IP.<br />\
+That's cool, but if you want to use this site as it was intended, you'll need\
+to let <b>bigip.space</b> call scripts from <b>api.ipify.org</b>.\
+<br /><br />\
+<em>Using uBlock Origin? <a href=ublock-example.html>See an example.</a></em>\
+"
     details.innerHTML = errorText
   }
 
