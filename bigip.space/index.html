@@ -24,7 +24,6 @@
   <footer>
     <a href=https://gitlab.com/tywe/bigip.space>An open-source project</a>
   </footer>
-</body>
 <script type="application/javascript">
   function setText(json) {
     var ipText = document.getElementById("ip-text");
@@ -73,7 +72,8 @@ to let <b>bigip.space</b> call scripts from <b>api.ipify.org</b>.\
   }
 </script>
 <script type="application/javascript"
-  src="https://api.ipify.org?format=jsonp&callback=setText"
+  src="https://api.ipify.org?format=jsonp&ampcallback=setText"
   onerror=ipifyScriptBlocked()>
 </script>
+</body>
 </html>
