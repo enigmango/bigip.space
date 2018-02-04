@@ -34,15 +34,15 @@
     details.innerHTML = detailsText;
   }
 
-  function ipifyScriptBlocked() {
-    setText({"ip": "Sorry!"})
+  function ipScriptBlocked() {
+    setText({"ip": "Sorry!"});
     var errorText = "An ad/script blocker has blocked the ability to view your public IP.<br />\
 That's cool, but if you want to use this site as it was intended, you'll need \
-to let <b>bigip.space</b> call scripts from <b>api.ipify.org</b>.\
+to let <b>bigip.space</b> call scripts from <b>ipapi.co</b>.\
 <br /><br />\
 <em>Using uBlock Origin? <a href=ublock-example.html>See an example.</a></em>\
-"
-    details.innerHTML = errorText
+";
+    details.innerHTML = errorText;
   }
 
   function copyIP(input) {
@@ -72,8 +72,8 @@ to let <b>bigip.space</b> call scripts from <b>api.ipify.org</b>.\
   }
 </script>
 <script type="application/javascript"
-  src="https://api.ipify.org?format=jsonp&amp;callback=setText"
-  onerror=ipifyScriptBlocked()>
+  src="https://ipapi.co/jsonp/?callback=setText"
+  onerror=ipScriptBlocked()>
 </script>
 </body>
 </html>
