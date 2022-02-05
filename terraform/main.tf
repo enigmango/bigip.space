@@ -179,8 +179,8 @@ resource "aws_iam_role" "bigip" {
                 "Effect": "Allow",
                 "Principal": {
                     "Service": [
-                        "edgelambda.amazonaws.com",
-                        "lambda.amazonaws.com"
+                        "lambda.amazonaws.com",
+                        "edgelambda.amazonaws.com"
                     ]
                 },
                 "Action": "sts:AssumeRole"

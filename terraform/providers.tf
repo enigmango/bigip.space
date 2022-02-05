@@ -6,6 +6,12 @@ terraform {
       version = "~> 3.0"
     }
   }
+  backend "remote" {
+    hostname     = "app.terraform.io"
+    workspaces {
+      name = "bigipspace"
+    }
+  }
 }
 
 provider "aws" {
