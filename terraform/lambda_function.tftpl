@@ -1,0 +1,54 @@
+def create_content(ip):
+    return f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name=copyright content="Whatever, go for it">
+  <meta name="description" content="Get your public IP address. Both big and space-ish.">
+  <link rel="stylesheet" href="${css_file}">
+  <title>
+  {ip} | BIGIP.SPACE
+  </title> 
+</head>
+<body background="${bg_file}"> <!-- https://www.toptal.com/designers/subtlepatterns/stardust/ -->
+  <div class="big" id="ip-text">{ip}</div>
+  <footer>
+    <a href=https://gitlab.com/tywe/bigip.space>Source</a>
+  </footer>
+</body>
+</html>
+"""
+
+
+def lambda_handler(event, context):
+    # Generate HTTP OK response using 200 status code with HTML body.
+    request = event['Records'][0]['cf']['request']
+    try:
+        true_ip = request['headers']['true-client-ip'][0]['value']
+    except:
+        true_ip = "unknown"
+
+    print(f"request {request}")
+
+    response = {
+        'status': '200',
+        'statusDescription': 'OK',
+        'headers': {
+            'cache-control': [
+                {
+                    'key': 'Cache-Control',
+                    'value': 'max-age=100'
+                }
+            ],
+            "content-type": [
+                {
+                    'key': 'Content-Type',
+                    'value': 'text/html'
+                }
+            ]
+        },
+        'body': create_content(true_ip)
+    }
+    return response
