@@ -224,7 +224,7 @@ resource "aws_s3_bucket_object" "css" {
   bucket = aws_s3_bucket.bigip.id
   key    = "main.css"
   source = "${path.module}/../public/main.css"
-
+  etag = filemd5("${path.module}/../public/main.css")
   content_type = "text/css"
 
   provider = aws.use2
@@ -234,6 +234,8 @@ resource "aws_s3_bucket_object" "bg" {
   bucket = aws_s3_bucket.bigip.id
   key    = "bg.png"
   source = "${path.module}/../public/bg.png"
+  etag = filemd5("${path.module}/../public/bg.png")
+  content_type = "img/png"
 
   provider = aws.use2
 
@@ -243,6 +245,8 @@ resource "aws_s3_bucket_object" "index" {
   bucket = aws_s3_bucket.bigip.id
   key    = "index.html"
   source = "${path.module}/../public/index.html"
+  etag = filemd5("${path.module}/../public/index.html")
+  content_type = "text/html"
 
   provider = aws.use2
 }
