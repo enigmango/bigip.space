@@ -193,7 +193,7 @@ POLICY
 data "archive_file" "lambda" {
   type             = "zip"
   output_file_mode = "0666"
-  output_path      = "${path.module}/.terraform/bigip.zip"
+  output_path      = "${path.module}/bigip.zip"
 
   source {
     content = templatefile(
