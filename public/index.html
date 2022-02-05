@@ -4,76 +4,9 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name=viewport content="width=device-width, initial-scale=1">
   <meta name=copyright content="Whatever, go for it">
-  <meta name="description" content="Get your public IP address and easily copy it to the clipboard. Big. Space-ish.">
-  <link rel="stylesheet" href="css/main.css">
+  <meta name="description" content="Placeholder">
 </head>
-<body background=img/bg.png> <!-- https://www.toptal.com/designers/subtlepatterns/stardust/ -->
-  <div class="big" id="ip-text" onclick=copyIP(myIP)></div>
-  <div id=details></div>
-  <noscript>
-    <title>
-      Your public IP address | BIGIP.SPACE
-    </title>
-    <p>
-      Sorry! This site uses JavaScript to detect your public IP address.
-      You'll have to enable JavaScript to experience everything this site has to offer.
-      <br />
-      Either way, you can still hang out here if you want. Take your time.
-    </p>
-  </noscript>
-  <footer>
-    <a href=https://gitlab.com/tywe/bigip.space>An open-source project</a>
-  </footer>
-<script type="application/javascript">
-  function setText(json) {
-    var ipText = document.getElementById("ip-text");
-    myIP = json.ip;
-    detailsText = "This is your public IP address. Click it to copy it to the clipboard.";
-    ipText.innerHTML = myIP;
-    document.title = myIP + " | BIGIP.SPACE";
-    details.innerHTML = detailsText;
-  }
-
-  function ipScriptBlocked() {
-    setText({"ip": "Sorry!"});
-    var errorText = "An ad/script blocker has blocked the ability to view your public IP.<br />\
-That's cool, but if you want to use this site as it was intended, you'll need \
-to let <b>bigip.space</b> call scripts from <b>ipapi.co</b>.\
-<br /><br />\
-<em>Using uBlock Origin? <a href=ublock-example.html>See an example.</a></em>\
-";
-    details.innerHTML = errorText;
-  }
-
-  function copyIP(input) {
-      document.getElementById("ip-text").classList.toggle('animate-opacity')
-      document.getElementById("ip-text").classList.toggle('animate-fading')
-      if (window.clipboardData && window.clipboardData.setData) {
-          // IE specific code path to prevent textarea being shown while dialog is visible.
-          return clipboardData.setData("Text", input);
-
-      } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
-          var textarea = document.createElement("textarea");
-          textarea.textContent = input;
-          textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
-          document.body.appendChild(textarea);
-          textarea.select();
-          try {
-              document.getElementById("ip-text").classList.add('animate-opacity')
-              document.getElementById("ip-text").classList.add('animate-fading')
-              return document.execCommand("copy");  // Security exception may be thrown by some browsers.
-          } catch (ex) {
-              console.warn("Copy to clipboard failed.", ex);
-              return false;
-          } finally {
-              document.body.removeChild(textarea);
-          }
-      }
-  }
-</script>
-<script type="application/javascript"
-  src="https://ipapi.co/jsonp/?callback=setText"
-  onerror=ipScriptBlocked()>
-</script>
+<body>
+  This is just a placeholder. If you're seeing this, you came in the wrong door.
 </body>
 </html>
