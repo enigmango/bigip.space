@@ -235,7 +235,7 @@ resource "aws_s3_bucket_object" "bg" {
   key    = "bg.png"
   source = "${path.module}/../public/bg.png"
   etag = filemd5("${path.module}/../public/bg.png")
-  content_type = "img/png"
+  content_type = "image/png"
 
   provider = aws.use2
 
