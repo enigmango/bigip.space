@@ -25,13 +25,26 @@ def create_content(ip):
 def lambda_handler(event, context):
     # Generate HTTP OK response using 200 status code with HTML body.
     request = event['Records'][0]['cf']['request']
+    print(f"request {request}")
+
     try:
         true_ip = request['headers']['true-client-ip'][0]['value']
     except:
         true_ip = "unknown"
-
-    print(f"request {request}")
-
+    try:
+        user_agent = request['headers']['user-agent'][0]['value'].casefold()
+    except:
+        user_agent = "unknown"
+    
+    print(user_agent)
+    
+    if "curl" in user_agent or "powershell" in user_agent:
+        content_type = "text/plain"
+        body = true_ip
+    else:
+        content_type = "text/html"
+        body = create_content(true_ip)
+    
     response = {
         'status': '200',
         'statusDescription': 'OK',
@@ -45,10 +58,11 @@ def lambda_handler(event, context):
             "content-type": [
                 {
                     'key': 'Content-Type',
-                    'value': 'text/html'
+                    'value': content_type
                 }
             ]
         },
-        'body': create_content(true_ip)
+        'body': body
     }
+
     return response
