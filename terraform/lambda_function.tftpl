@@ -40,7 +40,7 @@ def lambda_handler(event, context):
     
     if "curl" in user_agent or "powershell" in user_agent:
         content_type = "text/plain"
-        body = true_ip
+        body = f"{true_ip}\n"
     else:
         content_type = "text/html"
         body = create_content(true_ip)
