@@ -7,10 +7,10 @@ resource "aws_s3_bucket" "bigip" {
 
 data "aws_iam_policy_document" "bigip_public" {
   statement {
-    sid = "PublicReadGetObject"
+    sid = "CloudFrontReadOnly"
     principals {
-      type        = "*"
-      identifiers = ["*"]
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
     }
 
     actions = [
@@ -20,6 +20,12 @@ data "aws_iam_policy_document" "bigip_public" {
     resources = [
       "${aws_s3_bucket.bigip.arn}/*",
     ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceArn"
+      values   = [resource.aws_cloudfront_distribution.bigip.arn]
+    }
   }
 }
 
@@ -42,11 +48,19 @@ resource "aws_s3_bucket_policy" "bigip_public" {
 }
 
 data "aws_cloudfront_origin_request_policy" "managed_all_viewer" {
-  name = "Managed-AllViewer"
+  name = "Managed-AllViewerExceptHostHeader"
 }
 
 data "aws_cloudfront_cache_policy" "managed_caching_optimized" {
   name = "Managed-CachingOptimized"
+}
+
+resource "aws_cloudfront_origin_access_control" "bigip" {
+  name                              = "bigip"
+  description                       = "Origin Access for bigip.space"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 
 resource "aws_cloudfront_function" "myip" {
@@ -74,11 +88,12 @@ resource "aws_cloudfront_distribution" "bigip" {
   origin {
     domain_name = aws_s3_bucket.bigip.bucket_regional_domain_name
     origin_id   = local.origin_id
+    origin_access_control_id = aws_cloudfront_origin_access_control.bigip.id
   }
 
   enabled             = true
   is_ipv6_enabled     = true
-  default_root_object = aws_s3_bucket_object.index.key
+  default_root_object = aws_s3_object.index.key
 
   aliases = ["bigip.space"]
 
@@ -92,7 +107,7 @@ resource "aws_cloudfront_distribution" "bigip" {
 
     compress = true
 
-    viewer_protocol_policy = "redirect-to-https"
+    viewer_protocol_policy = "allow-all"
     min_ttl                = 0
     default_ttl            = 0
     max_ttl                = 0
@@ -120,7 +135,7 @@ resource "aws_cloudfront_distribution" "bigip" {
 
   viewer_certificate {
     acm_certificate_arn      = aws_acm_certificate.bigip.arn
-    minimum_protocol_version = "TLSv1.1_2016"
+    minimum_protocol_version = "TLSv1.2_2021"
     ssl_support_method       = "sni-only"
   }
 }
@@ -199,8 +214,8 @@ data "archive_file" "lambda" {
     content = templatefile(
       "./lambda_function.tftpl",
       {
-        css_file = "https://${aws_s3_bucket.bigip.bucket_regional_domain_name}/${aws_s3_bucket_object.css.key}"
-        bg_file  = "https://${aws_s3_bucket.bigip.bucket_regional_domain_name}/${aws_s3_bucket_object.bg.key}"
+        css_file = "https://${aws_s3_bucket.bigip.bucket_regional_domain_name}/${aws_s3_object.css.key}"
+        bg_file  = "https://${aws_s3_bucket.bigip.bucket_regional_domain_name}/${aws_s3_object.bg.key}"
       }
     )
     filename = "lambda_function.py"
@@ -217,10 +232,12 @@ resource "aws_lambda_function" "bigip" {
 
   source_code_hash = data.archive_file.lambda.output_base64sha256
 
-  runtime = "python3.9"
+  runtime = "python3.13"
+
+  timeouts {}
 }
 
-resource "aws_s3_bucket_object" "css" {
+resource "aws_s3_object" "css" {
   bucket = aws_s3_bucket.bigip.id
   key    = "main.css"
   source = "${path.module}/../public/main.css"
@@ -230,7 +247,7 @@ resource "aws_s3_bucket_object" "css" {
   provider = aws.use2
 }
 
-resource "aws_s3_bucket_object" "bg" {
+resource "aws_s3_object" "bg" {
   bucket = aws_s3_bucket.bigip.id
   key    = "bg.png"
   source = "${path.module}/../public/bg.png"
@@ -241,7 +258,7 @@ resource "aws_s3_bucket_object" "bg" {
 
 }
 
-resource "aws_s3_bucket_object" "index" {
+resource "aws_s3_object" "index" {
   bucket = aws_s3_bucket.bigip.id
   key    = "index.html"
   source = "${path.module}/../public/index.html"
