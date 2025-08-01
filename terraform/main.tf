@@ -48,6 +48,7 @@ resource "aws_s3_bucket_ownership_controls" "bigip" {
   rule {
     object_ownership = "BucketOwnerEnforced"
   }
+  provider = aws.use2
 }
 
 resource "aws_s3_bucket_acl" "bigip" {
