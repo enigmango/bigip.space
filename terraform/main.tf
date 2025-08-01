@@ -4,7 +4,6 @@ locals {
 
 resource "aws_s3_bucket" "bigip" {
   bucket = "bigip"
-  acl    = "private"
 
   provider = aws.use2
 }
