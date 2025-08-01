@@ -1,3 +1,7 @@
+locals {
+  domain_name = "bigip.space"
+}
+
 resource "aws_s3_bucket" "bigip" {
   bucket = "bigip"
   acl    = "private"
@@ -38,6 +42,20 @@ resource "aws_s3_bucket_public_access_block" "bigip" {
   block_public_acls       = true
 
   provider = aws.use2
+}
+
+resource "aws_s3_bucket_ownership_controls" "bigip" {
+  bucket = aws_s3_bucket.bigip.id
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_s3_bucket_acl" "bigip" {
+  depends_on = [aws_s3_bucket_ownership_controls.bigip]
+
+  bucket = aws_s3_bucket.bigip.id
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_policy" "bigip_public" {
@@ -95,7 +113,7 @@ resource "aws_cloudfront_distribution" "bigip" {
   is_ipv6_enabled     = true
   default_root_object = aws_s3_object.index.key
 
-  aliases = ["bigip.space"]
+  aliases = [local.domain_name]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", ]
@@ -141,7 +159,7 @@ resource "aws_cloudfront_distribution" "bigip" {
 }
 
 resource "aws_acm_certificate" "bigip" {
-  domain_name       = "bigip.space"
+  domain_name       = local.domain_name
   validation_method = "DNS"
 
   subject_alternative_names = ["*.bigip.space"]
@@ -157,7 +175,7 @@ resource "aws_acm_certificate_validation" "bigip" {
 }
 
 resource "aws_route53_zone" "bigip" {
-  name = "bigip.space"
+  name = local.domain_name
 }
 
 resource "aws_route53_record" "bigip_validation" {
@@ -214,8 +232,8 @@ data "archive_file" "lambda" {
     content = templatefile(
       "./lambda_function.tftpl",
       {
-        css_file = "https://${aws_s3_bucket.bigip.bucket_regional_domain_name}/${aws_s3_object.css.key}"
-        bg_file  = "https://${aws_s3_bucket.bigip.bucket_regional_domain_name}/${aws_s3_object.bg.key}"
+        css_file = "https://${local.domain_name}/${aws_s3_object.css.key}"
+        bg_file  = "https://${local.domain_name}/${aws_s3_object.bg.key}"
       }
     )
     filename = "lambda_function.py"

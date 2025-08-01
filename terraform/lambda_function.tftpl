@@ -23,6 +23,10 @@ def create_content(ip):
 
 
 def lambda_handler(event, context):
+    # Don't generate IP page if the request is for assets
+    if request['uri'][-4:] in [".png",".css"]:
+        return request
+
     # Generate HTTP OK response using 200 status code with HTML body.
     request = event['Records'][0]['cf']['request']
     print(f"request {request}")
@@ -44,7 +48,7 @@ def lambda_handler(event, context):
     else:
         content_type = "text/html"
         body = create_content(true_ip)
-    
+
     response = {
         'status': '200',
         'statusDescription': 'OK',
