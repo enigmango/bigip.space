@@ -56,6 +56,8 @@ resource "aws_s3_bucket_acl" "bigip" {
 
   bucket = aws_s3_bucket.bigip.id
   acl    = "private"
+
+  provider = aws.use2
 }
 
 resource "aws_s3_bucket_policy" "bigip_public" {
