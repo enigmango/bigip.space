@@ -51,15 +51,6 @@ resource "aws_s3_bucket_ownership_controls" "bigip" {
   provider = aws.use2
 }
 
-resource "aws_s3_bucket_acl" "bigip" {
-  depends_on = [aws_s3_bucket_ownership_controls.bigip]
-
-  bucket = aws_s3_bucket.bigip.id
-  acl    = "private"
-
-  provider = aws.use2
-}
-
 resource "aws_s3_bucket_policy" "bigip_public" {
   bucket = aws_s3_bucket.bigip.id
   policy = data.aws_iam_policy_document.bigip_public.json
